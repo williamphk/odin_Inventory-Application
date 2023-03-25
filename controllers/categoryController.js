@@ -1,8 +1,15 @@
 const Category = require("../models/category");
 
 // Display list of all Categorys
-exports.category_list = (req, res) => {
-  res.send("NOT IMPLEMENTED: Category list");
+exports.category_list = async (req, res, next) => {
+  try {
+    const category_list = await Category.find({}, "name description").sort({
+      name: 1,
+    });
+    res.render("category_list", { title: "Category List", category_list });
+  } catch (err) {
+    next(err);
+  }
 };
 
 // Display detail page for a specific Category

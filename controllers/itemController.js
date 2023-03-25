@@ -1,8 +1,6 @@
 const Item = require("../models/item");
 const Category = require("../models/category");
 
-const async = require("async");
-
 exports.index = async (req, res) => {
   try {
     const [item_count, category_count] = await Promise.all([
@@ -24,8 +22,15 @@ exports.index = async (req, res) => {
 };
 
 // Display list of all Items
-exports.item_list = (req, res) => {
-  res.send("NOT IMPLEMENTED: Item list");
+exports.item_list = async (req, res, next) => {
+  try {
+    const item_list = await Item.find({}, "name description category")
+      .sort({ name: 1 })
+      .populate("category");
+    res.render("item_list", { title: "Item List", item_list });
+  } catch (err) {
+    next(err);
+  }
 };
 
 // Display detail page for a specific Item
