@@ -3,3 +3,7 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
+
+  ul
+      li #[strong Items:] !{data.item_count}
+      li #[strong Categories:] !{data.category_count}

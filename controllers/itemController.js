@@ -1,7 +1,26 @@
 const Item = require("../models/item");
+const Category = require("../models/category");
 
-exports.index = (req, res) => {
-  res.send("NOT IMPLEMENTED: Item index");
+const async = require("async");
+
+exports.index = async (req, res) => {
+  try {
+    const [item_count, category_count] = await Promise.all([
+      Item.countDocuments(),
+      Category.countDocuments(),
+    ]);
+
+    res.render("index", {
+      title: "Inventory Application Home",
+      data: { item_count, category_count },
+    });
+  } catch (err) {
+    res.render("index", {
+      title: "Inventory Application Home",
+      error: err,
+      data: {},
+    });
+  }
 };
 
 // Display list of all Items
