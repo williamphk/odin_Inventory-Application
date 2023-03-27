@@ -1,6 +1,12 @@
 const Category = require("../models/category");
 
 const { body, validationResult } = require("express-validator");
+const crypto = require("crypto");
+
+require("dotenv").config();
+
+// Set your secret admin password (preferably as an environment variable)
+const SECRET_ADMIN_PASSWORD = process.env.SECRET_ADMIN_PASSWORD;
 
 // Display list of all Categorys
 exports.category_list = async (req, res, next) => {
@@ -75,6 +81,23 @@ exports.category_delete_get = async (req, res, next) => {
 
 // Handle Category delete on POST
 exports.category_delete_post = async (req, res, next) => {
+  const adminPassword = req.body.adminPassword;
+  const hashedPassword = crypto
+    .createHash("sha256")
+    .update(adminPassword)
+    .digest("hex");
+  const hashedSecretPassword = crypto
+    .createHash("sha256")
+    .update(SECRET_ADMIN_PASSWORD)
+    .digest("hex");
+  console.log(
+    "hashedPassword: " + hashedPassword,
+    "SECRET_ADMIN_PASSWORD: " + hashedSecretPassword
+  );
+  if (hashedPassword !== hashedSecretPassword) {
+    // Render an error message if the password is incorrect
+    return res.render("error", { message: "Incorrect admin password" });
+  }
   try {
     const category_delete = await Category.findById(req.params.id);
     if (category_delete == null) {

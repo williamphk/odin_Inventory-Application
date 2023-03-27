@@ -9,4 +9,8 @@ block content
         div.form-group
             input#categoryid.form-control(type='hidden',name='categoryid', required='true', value=category_delete._id )
 
+        div.form-group 
+            label(for="adminPassword") Admin Password:
+            input#adminPassword.form-control(type='password', name="adminPassword", required=true)
+
         button.btn.btn-primary(type='submit') Delete

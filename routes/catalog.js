@@ -44,8 +44,6 @@ router.post(
 const uploadsPath = path.join(__dirname, "..", "uploads");
 router.use("/uploads", express.static(uploadsPath));
 
-console.log("Serving static files from:", uploadsPath);
-
 // GET request to delete Item
 router.get("/item/:id/delete", item_controller.item_delete_get);
 
