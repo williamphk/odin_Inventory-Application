@@ -84,6 +84,10 @@ exports.item_create_post = [
       category: req.body.category,
     });
 
+    if (req.file) {
+      item.imagePath = req.file.path;
+    }
+
     // Check if there are errors.
     if (!errors.isEmpty()) {
       try {
@@ -210,6 +214,10 @@ exports.item_update_post = [
       category: req.body.category,
       _id: req.params.id, //This is required, or a new ID will be assigned!
     });
+
+    if (req.file) {
+      item.imagePath = req.file.path;
+    }
 
     // Check if there are errors.
     if (!errors.isEmpty()) {

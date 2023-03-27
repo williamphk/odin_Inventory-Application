@@ -1,6 +1,26 @@
 const express = require("express");
 const router = express.Router();
 
+const path = require("path");
+
+const multer = require("multer");
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/");
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix =
+      Date.now() +
+      "-" +
+      Math.round(Math.random() * 1e9) +
+      path.extname(file.originalname);
+    cb(null, file.fieldname + "-" + uniqueSuffix);
+  },
+});
+
+const upload = multer({ storage: storage });
+
 //Require controller modules
 const item_controller = require("../controllers/itemController");
 const category_controller = require("../controllers/categoryController");
@@ -14,7 +34,17 @@ router.get("/", item_controller.index);
 router.get("/item/create", item_controller.item_create_get);
 
 // POST request for creating Item
-router.post("/item/create", item_controller.item_create_post);
+router.post(
+  "/item/create",
+  upload.single("image"),
+  item_controller.item_create_post
+);
+
+// Serve the static files in the 'uploads' folder
+const uploadsPath = path.join(__dirname, "..", "uploads");
+router.use("/uploads", express.static(uploadsPath));
+
+console.log("Serving static files from:", uploadsPath);
 
 // GET request to delete Item
 router.get("/item/:id/delete", item_controller.item_delete_get);
@@ -26,7 +56,11 @@ router.post("/item/:id/delete", item_controller.item_delete_post);
 router.get("/item/:id/update", item_controller.item_update_get);
 
 // POST request to update Item
-router.post("/item/:id/update", item_controller.item_update_post);
+router.post(
+  "/item/:id/update",
+  upload.single("image"),
+  item_controller.item_update_post
+);
 
 // GET request for one Item
 router.get("/item/:id", item_controller.item_detail);

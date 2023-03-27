@@ -7,6 +7,10 @@ block content
     p #[strong Price:] #{item_detail.price}
     p #[strong Number in stock:] #{item_detail.numberInStock}
     p #[strong Category:] #{item_detail.category.name}
+    if item_detail.imagePath
+        p #[strong Image:]
+        img.img-thumbnail(src=`/catalog/uploads/${item_detail.imagePath.split('/').pop()}`)
+
 
     hr
     p
