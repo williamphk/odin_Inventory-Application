@@ -1,0 +1,12 @@
+extends layout
+
+block content
+    h1 Title: !{category_detail.name}
+
+    p #[strong Description:] !{category_detail.description}
+
+    hr
+    p
+        a(href=category_detail.url+'/delete') Delete Item
+    p
+        a(href=category_detail.url+'/update') Update Item

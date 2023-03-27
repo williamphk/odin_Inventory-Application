@@ -31,7 +31,7 @@ exports.item_list = async (req, res, next) => {
       .populate("category");
     res.render("item_list", { title: "Item List", item_list });
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
@@ -41,7 +41,7 @@ exports.item_detail = async (req, res, next) => {
     const item_detail = await Item.findById(req.params.id).populate("category");
     res.render("item_detail", { title: "Item Detail", item_detail });
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
@@ -51,7 +51,7 @@ exports.item_create_get = async (req, res, next) => {
     const categories = await Category.find({}, "name");
     res.render("item_form", { title: "Create Item", categories });
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
@@ -175,9 +175,9 @@ exports.item_update_get = async (req, res, next) => {
     }
 
     // Success.
-    res.render("item_form", { title: "Create Item", item, categories });
+    res.render("item_form", { title: "Update Item", item, categories });
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
@@ -224,7 +224,7 @@ exports.item_update_post = [
           }
         }
         res.render("item_form", {
-          title: "Create Item",
+          title: "Update Item",
           categories,
           item,
           errors: errors.array(),
